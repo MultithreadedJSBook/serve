@@ -1,3 +1,5 @@
+Note: This is a fork that always sets the headers necessary to support `SharedArrayBuffer`.
+
 ![](https://assets.vercel.com/image/upload/v1527770721/repositories/serve/serve-repo-banner.png)
 
 <a aria-label="Vercel logo" href="https://vercel.com">

@@ -66,6 +66,9 @@ const getHelp = () => chalk`
       By default, {cyan serve} will listen on {bold 0.0.0.0:5000} and serve the
       current working directory on that address.
 
+      Note that SharedArrayBuffer is always supported, with the \`Cross-Origin-Opener-Policy\`
+      header set to \`same-origin\` and \`Cross-Origin-Embedder-Policy\` set to \`require-corp\`.
+
       Specifying a single {bold --listen} argument will overwrite the default, not supplement it.
 
   {bold OPTIONS}
@@ -86,9 +89,6 @@ const getHelp = () => chalk`
       -c, --config                        Specify custom path to \`serve.json\`
 
       -C, --cors                          Enable CORS, sets \`Access-Control-Allow-Origin\` to \`*\`
-
-      --sab                               Enable SharedArrayBuffer, sets \`Cross-Origin-Opener-Policy\` to
-                                          \`same-origin\` and \`Cross-Origin-Embedder-Policy\` to \`require-corp\`
 
       -n, --no-clipboard                  Do not copy the local address to the clipboard
 
@@ -198,10 +198,8 @@ const startEndpoint = (endpoint, config, args, previous) => {
 		if (args['--cors']) {
 			response.setHeader('Access-Control-Allow-Origin', '*');
 		}
-		if (args['--sab']) {
-			response.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
-			response.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
-		}
+		response.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+		response.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
 		if (compress) {
 			await compressionHandler(request, response);
 		}
@@ -388,7 +386,6 @@ const loadConfig = async (cwd, entry, args) => {
 			'--no-etag': Boolean,
 			'--symlinks': Boolean,
 			'--cors': Boolean,
-			'--sab': Boolean,
 			'--no-port-switching': Boolean,
 			'--ssl-cert': String,
 			'--ssl-key': String,
